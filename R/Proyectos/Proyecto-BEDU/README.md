@@ -1,1 +1,1 @@
-
+Proyecto desarrollado en la primera parte de la segunda fase del curso en ciencia de datos impartido por la academia BEDU donde analizamos los datos de los juegos indies disponibles en la plataforma Steam
