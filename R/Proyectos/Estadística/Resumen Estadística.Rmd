@@ -1,0 +1,470 @@
+---
+title: "Estadistica Introductoria"
+author: "Luis Felipe Trujillo Jiménez"
+date: "12/4/2021"
+output: html_document
+---
+La estadística es una colección de métodos que nos ayudan a descrubir, resumir, interpretar y analizar información.
+
+# Parte 1: Estadística Descriptiva
+
+## Poblaciones, muestras y observaciones 
+
+Las unidades en las que medimos la información(personas, carros, etc) se llaman **observaciones** y se denotan por la letra $\omega$ y un conjunto de observaciones forma una **población** denotado por la letra $\varOmega$. Cuando nos referimos a un individuo de la población se dice $\omega \in \varOmega$.
+
+Una **muestra** es un subconjunto de la poblacion $\{\omega_1,\omega_2,....,\omega_n\}\subseteq \varOmega$
+
+## Variables
+
+Cuando buscamos cierta información de la población podemos definir una **variable estadística** $X$ que será una característica particular de la población
+
+### Variables cualitativas y cuantitativas
+
+**Variables cualitativas**: Variables que no pueden ser ordenadas de una manera lógica
+
+**Variables cuantitativas**: Variables que pueden ser ordenas en una manera lógica y que representan cantidades medibles
+
+### Variables discretas y continuas
+
+**Variables discretas**: Pueden tomar valores finitos
+
+**Variables continuas**: Pueden tomas valores infinitos 
+
+### Escalas
+
+Son las formas en las que podemos medir la información 
+
+**Escala nominal**: Los valores de esta escala no pueden ser ordenados.
+
+**Escala ordinal**: Pueden ser ordenados sus valores pero al comparar sus valores no existe una diferencia significativa. Por ejemplo los grados de estudio kinder-primaria-secundaria-preparatoria, se pueden ordenar pero no comparar
+
+**Escala Continua**: Pueden ordenarse sus datos y comparar sus valores
+
+
+## Medidas de tendencia central y representación gráfica de los datos
+
+### Frecuencias relativas y absolutas
+
+*Frecuencia absoluta*: Es el número de observaciones de una categoría específica de una población. Se denota como $n_j$ y esta formado por individuos de la $j$-esima categoria $a_j$ y se calcula como $\sum_{j=1}^{k} a_j=n_j$ 
+
+*Frecuencia relativa*: Nos dice la proporción de la categoría u observación que hay en la población total se calcula como la frecuencia absoluta entre el total de individuos en la población. Se calcula como $f(a_j)=\frac{n_j}{n}$
+
+Ejemplo
+
+```{r}
+pizza<-c(421,410,435)
+
+#Frecuencia absoluta
+table(pizza)
+table(pizza)/length(pizza)
+```
+
+## Función de Acumulación Empírica 
+
+Resume y muestra la frecuencia o distribución de las variables , nos da una idea de la acumulación de las frecuencias relativas hasta algún punto.
+
+Se escribe como $F(x)$ y se define como la acumulación de las frecuencias relativas de todos los valores $a_j$ que son menoes o iguales a x:
+$F(x)=\sum_{a_j\leq x}f(a_j)$
+
+Esto nos dice que $F(x)$ es:
+
+* Monótona no decreciente 
+* $0\leq F(x)\leq 1$
+* $\lim_{x\rightarrow\infty}F(x)=1$
+* Es continua por la derecha
+
+### $F(x)$ para variables ordinales
+
+Es una función de escalera
+
+Se calcula sumando la frecuencia relativa anterior a la nueva, o sea, por ejemplo si tenemos 4 objetos: 
+* $F_1=f_1$
+* $F_2=f_1+f_2$ 
+* $F_3=f_1+f_2+f_3$
+* $F_4=f_1+f_2+f_3+f_4$
+En R 
+```{r}
+sv<-c(rep(1,4),rep(2,6),rep(3,90),rep(4,70),rep(5,20))
+sv
+
+#calcular la funcion de distribucion
+print(ecdf(sv))
+
+#grafica
+plot.ecdf(sv)
+```
+
+
+## Representación Gráfica de las variables 
+
+### Gráfico de Barras
+
+Observa las frecuencias relativas de las variables
+
+El código es el siguiente 
+
+```{r}
+#barplot( tabla,horiz=T si quieres horizontales)
+
+```
+
+## Diagrama de Pay
+
+Sirve para observar las frecuencias relativas de variables nominales y ordinales
+
+El código es el siguiente
+
+```{r}
+#pie(tabla)
+```
+
+## Histogramas
+
+Es la forma de representar variables continuas. Se basa en categorizar la información en diferentes grupos y graficar las barras de cada categoría
+
+El código es
+
+```{r}
+#hist(tabla,freq= F si no se muestran las frecuencias relativas)
+
+```
+
+## Kernel Density Plots
+
+En los histogramas las variable continuas se categoriza artificialmente así que para solucionar esto se suaviza el histograma haciendo que cada observación contribuya a diferentes clases con diferentes pesos presentando la distribución como una variable continua mas que como una función a pedazos produciendo un kernel density plot
+
+El comando es
+
+```{r}
+#plot(density(datos,kernel="gaussian"))
+```
+
+
+# Medidas de tendencia central y de dispersión
+
+Resumen  la información de una forma significativa y consisa
+
+## Medidas de tendencia central
+
+Son funciones estadísticas que describen el promedio o el centro de la información 
+
+### Promedio aritmético
+
+
+Si tenemos un conjunto de valores $x_1,x_2,....,x_n$ el promedio aritmético  define como $\bar{x}=\frac{1}{n} \sum_{i=1}^{n} x_i$
+
+Se calcula con el comando `mean()`
+
+#### Propiedades
+
+* La suma de las desviaciones de cada variable al rededor de la media es cero
+$\sum_{i=1}^{n} (x_i-\bar{x})=0$
+
+* Si se le aplica una transformación lineal de la forma $y_i=a+bx_i$ ,con $a$ y $b$ constantes, a los datos se cumple que:
+$\bar{y}=\frac{1}{n}\sum_{i=1}^{n}(a+bx_i)=a+b\bar{x}$
+
+### Mediana y cuantiles
+
+La **mediana**  es el valor que divide las observaciones en dos partes iguales se denota como $\tilde{x}_{0.5}$ y se cumple que $F(\tilde{x}_{0.5})=0.5$ tomando las estadísiticas de orden $x_{(1)}\leq x_{(2)}\leq...\leq x_{(n)}$ la media se calcula como 
+
+$x_{((n+1)/2)}$ si x es par
+
+$\frac{1}{2}(x_{(n/2)}+x_{(n/2+1)})$ si x es impar
+
+Se calcula como `median()`
+
+Los **cuantiles** son una generalización de la mediana, se parte la información en dos proporciones  como por ejemplo 25% y 75%. Se denota al cuantil $(\alpha$ x $100)\%$ como $\tilde{x}_{\alpha}$.
+
+Se les llama deciles si la información se divide en $0.1,0.2,...,0.9$ si se divide en $0.2,0.4,.....,0.8$ se llama quintiles, si se divide en $0.25,0.50,0.75$ se llaman cuartiles.
+
+El código es `quantile(datos,probs=c(vector de probabilidades))`
+
+### QQ-plots
+
+Es graficar los cuantiles de dos variables, nos dice si las distribuciones de las dos varibles son similares respecto a la localización de los datas.
+
+`qqplot()`
+
+### Moda
+
+Es el valor que ocurre mas veces e un conjunto de datos y se denota como $\bar{x}_m$ 
+
+### Media Geométrica
+
+Considerado n observaciones $x_1,x_2,....,x_n$ parte de una colección de variables cuantitativas, la media geométrica se define como:
+
+$\tilde{x}_G=(\prod_{i=1}^{n}x_i)^{1/n}$
+
+Esta media toma importancia cuando estamos interesados en productos de observaciones
+
+### Media Armónica
+
+Generalmente es usada cuando tenemos diferentes observaciones $x_i$ y contribuyen a la media con un peso $w_i$. Se calcula como
+
+$\bar{x}_H=\frac{\sum_{i=1}^{k}w_i}{\sum_{i=1}^{k}\frac{w_i}{x_i}}$
+
+## Medidas de dispersión
+
+Miden la variabilidad y la dispersión de los datos
+
+### Rango y ranfo intercuantil
+
+Si tenemos un conjunto de datos el **rango** es la resta entre la estadística mas grande menos la mas pequeña $R=x_{(n)}-x_{(1)}$.
+
+El **rango intercuantil** es definido como la diferencia entre el cuartil 75% y 25%, $d_Q=\tilde{x}_{0.75}-\tilde{x}_{0.25}$
+
+Cubre el centro de la distribución de los datos
+
+### Desviación absoluta, Varianza y desviación estandar
+
+**Varianza**: Es una de las medidas de dispersión mas importantes. Se obtiene del error minimo cuadrático cuando el punto del que se estan midiendo las distancias es la media. Se calcula con la siguiente fórmula:
+
+\[ \tilde{s}^{2}=\frac{1}{n}\sum_{i=1}^{n} (x_i-\tilde{x})^2\]
+
+Y la **Desviación estandar** se calcula como:
+
+\[ \tilde{s}^{2}=\sqrt{\frac{1}{n}\sum_{i=1}^{n} (x_i-\tilde{x})^2}\]
+
+La varianza al estar elevada al cuadrado es dificil de interpretar, sin embargo se usa para obtener otras formas de medir la asosiación de variables y para concluir cosas de una población.
+
+La desviación estandar se usa como un resumen estadístico de la dispersión de la información y mide que tan dispersas estan las observaciones de su media aritmética
+
+
+Bajo transformaciones lineales $y_i=a+bx_i$ la varianza se transforma en:
+
+\[ {\tilde{s}^{2}}_y=\frac{b^2}{n}\sum_{i=1}^{n} (x_i-\tilde{x})^2=b^2{\tilde{s}^{2}}_x\]
+
+**Estandarización**: Una variable se considera estandarizada si su media es cero y su varianza es 1. Para estandarizar se usa:
+
+$y_i=\frac{x_i-\tilde{x}}{\tilde{s}_x}=-\frac{\tilde{x}}{\tilde{s}_x}+\frac{1}{\tilde{s}_x}x_i$
+
+### Coeficiente de Variación
+
+Es una medida de dispersión que usa las desviaciones estandar y las medias de 2 poblaciones y permite un contraste entre las dos.
+
+Se define como $v=\frac{s}{x}$
+
+No tiene una unidad de medida definida, y se usa para comparar dos variables con diferentes unidades de medida pero que se pueden relacionar usando una transformacion lineal $y_i=bx_i$.
+
+### Box plots
+
+Son una forma simple de resumir y graficar la distribución de una variable continua usando su mediana, cuantiles, el mínimo, el máximo y valores extremos(outliers).
+
+El código es: `boxplot(datos,range= como se definen los valores extemos)`
+
+## Medidas de concentración 
+
+Miden la proporción de observaciones respecto a la suma de todas las observaciones \[\sum_{i=1}^{n} x_i\]
+
+### Curva de Lorenz
+
+Visualiza concentraciones gráficamente.
+Para hacerla se consideran n observaciones de una variable X, todas las observaciones deben ser positivas. La suma de todas esas observaciones es  \[\sum_{i=1}^{n} x_i=n\bar{x}\] si los datos estan desagrupados. Los datos se deben de ordenar y se calcula $u_i=\frac{1}{n}$, $i=0,...,n$.
+
+Y $v_i=\frac{\sum_{j=1}^{i}x_{(j)}}{\sum_{j=1}^{n}x_{(j)}}$.
+
+# Asosiación de dos variables
+
+## Descripción de la distribución de dos variables discretas
+
+### Tablas de contingencia
+
+Sirven para resumir la frecuencia absoluta de dos variables discretas. Son una generalización de estas.
+
+### Distribución conjunta, marginal y condicional
+
+Describen factores como el comportamiento de las variables juntas, como los valores de un variable se comportan cuando la otra se fija entre otros.
+
+Notación:
+* $n_{ij}$ Representa la distribución conjunta 
+
+* $n_{i+}$ Representa la distribución marginal de X
+
+* $n_{+j}$ Representa la distribución marginal de Y
+
+* $f_{i|j}^{X|Y}$ Representa distribución condicional de X dado $Y=y_j$ 
+
+* $f_{ij}$ Representa la distribución conjunta relativa 
+
+* $f_{i+}=\sum_{i=1}^{l}f_{ij}$ Representa la distribución marginalrelativa de X
+
+* $f_{i|j}^{X|Y}=\frac{f_{ij}}{f_{i+}}$ Representa la distribución condicional relativa de X dado $Y=y_j$
+
+### Representación gráfica
+
+Se pueden usar gráficos de barra donde cada categoria de X y Y se ve representada por una barra .
+
+### Independencia y frecuencias esperadas
+
+Dos variables son consideradas independientes si las observaciones de una no afectan los resultados de la otra. Que dos variables sean independientes implica que 
+
+$f_{ij}=f_if_j$
+
+## Medidas de asociación de dos variables 
+
+Cuando dos variables no son independientes pueden ser asociadas y esta puede ser débil o fuerte 
+
+### Graficación de variables continuas
+
+Se grafican las dos variables juntas en gráficas conocidas como diagramas de dispersión. Estos se generan con el código `plot(datos1,datos2)`
+
+### Coeficiente de correlación de Pearson
+
+El coeficiente de correlación de Pearson $r(x,y)=r$ mide el grado de relación lineal entre las variables X y Y siempre y cuando las variables estan linealmente relaciones, es decir $Y=a+bX$
+
+Se calcula con el siguiente código: `cor(datos1,datos2,method='pearson')`
+
+
+### Coeficiente de correlación de los rangos de Spearman
+
+Mide el grado de acuerdo entre dos variables cuando los datos de estas son ordenados.
+
+`cor(datos1,datos2,method='spearman')`
+
+
+# Probabilidad
+
+## Combinatoria
+
+**Función Factorial**: Se define la función factorial $n!$ como
+$$
+\\
+\begin{equation}
+n!=
+  \begin{cases}
+  1 \ ,\ n=0
+  \\
+  1\cdot2 \cdot 3 \cdot 4 \cdot.... \ ,\ n>0
+  \end{cases}
+\end{equation}
+\\
+$$
+
+El código es `factorial(n)`
+
+### Permutaciones
+
+Considerando n elementos, cada forma posible de ordenar los n elementos se le llama permutación 
+
+Se tiene dos posibles casos: Si los elementos son distinguibles entre si se le llama *permutación sin reemplazo* de otra forma es una *permutación con reemplazo*
+
+**Permutaciones sin reemplazo**:  Si todos los elementos son distinguibles entre si entonces hay $n!$ diferentes formas de ordenar los elementos
+
+**Permutaciones con reemplazo**: No todos los n elementos son distinguibles entre si. Se dividen los elementos en diferentes grupos que si son distinguibles, si son $s$ grupos de tamaño $n_1,n_2,...,n_S$. El número total de formas de ordenar los n elementos en s grupos es:
+
+$$\begin{aligned}
+\frac{n!}{n_1!n_2!....n_s!}
+\end{aligned}
+$$
+### Combinaciones
+
+**Coeficiente Binomial**: Se denota para dos enteros $0\leq m\leq n$
+
+$$
+\begin{aligned}
+  {n \choose m} = \frac{n!}{m!(n-m)!}
+\end{aligned}
+$$
+
+Se calcula como `choose(n,m)`
+
+Hay distintas reglas:
+
+* ${n \choose 0}=1$
+
+* ${n \choose 1}=n$
+
+* ${n \choose m}={n \choose{n-m}}$
+
+Ahora veamos de cuantas maneras diferentes se puede ordenar m en n elementos. Se distinguen los diferentes casos:
+
+* Combinaciones sin remplazo y sin consideración del orden de los elementos
+
+* Combinaciones sin reemplazo y considerando el orden de los elementos
+
+* Combinaciones con remplazo y sin consideración del orden de los elementos
+
+* Combinaciones con reemplazo remplazo y con consideración del orden de los elementos
+
+### Combinaciones sin remplazo y sin consideración del orden
+
+El número total de elementos se calcula como:
+
+$$\begin{aligned} 
+  {n\choose m}
+  \end{aligned}
+$$
+
+*Ejemplo: Supongamos que una compañia va a elegir a su mesa directiva. La mesa consiste en 5 elementos y hay 15 opciones a ser elegidas. ¿Cuantas combinaciones posibles hay?.*
+
+Dado que una persona no puede ser elegida dos veces y el orden no es importante entonces se calculan las combinaciones como:
+
+$$
+  \begin{aligned}
+    {15 \choose 5}= \frac{15!}{10!5!}=3003
+  \end{aligned}
+$$
+
+El código es:
+
+```{r}
+choose(15,5)
+```
+
+### Combinaciones sin remplazo y  considerando el 
+
+El número total de combinaciones se calcula como:
+
+$$
+  \begin{aligned}
+    \frac{n!}{(n-m)!}={n \choose m}m!
+  \end{aligned}
+$$
+
+*Ejemplo: Consideremos una carrera de 12 caballos. Una apuesta posible es pronosticar el ganador de la carrera, el segundo lugar y el tercer lugar. Da las combinaciones  *
+
+El número total de combinaciones diferentes para los caballos en los primeros tres lugares sería:
+
+$$
+  \begin{aligned}
+  \frac{12!}{(12-3)!}= 12 \cdot 11 \cdot 10=1320
+  \end{aligned}
+$$
+El codigo es:
+
+```{r}
+choose(12,3)*factorial(3)
+```
+### Combinaciones con remplazo y sin considerar el orden
+
+El número total de combinaciones es:
+
+$$
+  \begin{aligned}
+    {n+m-1 \choose m}=\frac{(n+m-1)!}{m!(n-1)!}={n+m-1 \choose n-1}
+  \end{aligned}
+$$
+*Ejemplo:Un granjero tiene 2 terrenos y quiere cultivar cada uno de 4 diferentes productos. Entonces el número total de opciones es:*
+
+$$
+  \begin{aligned}
+    {4+2-1 \choose 2}= {5 \choose 2}= \frac{5!}{2!3!}=10
+  \end{aligned}
+$$
+### Combinaciones con remplazo y considerando el orden
+
+Se calcula cómo $$n^m$$
+
+*Ejemplo: Considera ima targeta de crédito con 4 dígitos como PIN*
+
+El número total de combinaciones para el PIN es $10^4=10000$
+
+## Elementos de la teoría de la probabilidad
+
+### Conceptos básicos y teoria de conjuntos
+
+Un posible resultado de un experimento aleatorio se denota por $\omega_i$ y al conjunto de todos los posibles resultados se le denota por $\Omega$.
+
+**Eventos Disjuntos**: Dos eventos A y B son disjuntos si $A \cap B=\emptyset
+
+**Eventos Mutuamente Excluyentes**: Los eventos $A_1,A_2,...,A_m$ son mutuamente excluyentes si $A_i\cap A_j= \emptyset$ para cualquier $i\neq j$
